@@ -8,16 +8,16 @@ namespace webAddressbookTests
         [Test]
         public void GroupCreationTest()
         {
-            OpenHomePage();
-            Login(new AccountData("admin", "secret"));
-            GoToGroupPage();
-            InitGroupCreation();
+            app.Navigator.OpenHomePage();
+            app.Auth.Login(new AccountData("admin", "secret"));
+            app.Groups.GoToGroupPage();
+            app.Groups.InitGroupCreation();
             GroupData group = new GroupData("test");
             group.Header = "test1";
             group.Footer = "test2";
-            FillGroupForm(group);
-            SubmitGroupsCreation();
-            ReturnToGroups();
+            app.Groups.FillGroupForm(group);
+            app.Groups.SubmitGroupsCreation();
+            app.Groups.ReturnToGroups();
         }
     }
 }
