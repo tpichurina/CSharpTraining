@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
+using System.Text.RegularExpressions;
 
 namespace webAddressbookTests
 {
@@ -10,6 +12,7 @@ namespace webAddressbookTests
         {
             this.baseURL = baseURL;
         }
+
         public ContactHelper(ApplicationManager manager) : base(manager)
         {
         }
@@ -21,6 +24,7 @@ namespace webAddressbookTests
             SubmitAccountCreation();
             return this;
         }
+
         public ContactHelper FillContactForm(ContactData contact)
         {
             driver.FindElement(By.Name("firstname")).Click();
@@ -38,6 +42,15 @@ namespace webAddressbookTests
             return this;
         }
 
+        public ContactHelper Modify(int v, ContactData newData)
+        {
+            SelectContact(v);
+            InitContactModification();
+            FillContactForm(newData);
+            SubmitContactModification();
+            return this;
+        }
+
         public ContactHelper SubmitAccountCreation()
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/input[21]")).Click();
@@ -48,6 +61,52 @@ namespace webAddressbookTests
         {
             driver.FindElement(By.LinkText("add new")).Click();
             return this;
+        }
+        public ContactHelper SubmitContactModification()
+        {
+            driver.FindElement(By.Name("update")).Click();
+            return this;
+        }
+
+        public ContactHelper InitContactModification()
+        {
+            driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            return this;
+        }
+
+        public ContactHelper SelectContact(int index)
+        {
+            driver.FindElements(By.Name("selected[]"))[index].Click();
+            return this;
+        }
+        public ContactHelper RemoveContact(int v, bool acceptNextAlert)
+        {
+            SelectContact(v);
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
+            return this;
+        }
+
+        private string CloseAlertAndGetItsText(bool acceptNextAlert)
+        {
+            try
+            {
+                IAlert alert = driver.SwitchTo().Alert();
+                string alertText = alert.Text;
+                if (acceptNextAlert)
+                {
+                    alert.Accept();
+                }
+                else
+                {
+                    alert.Dismiss();
+                }
+                return alertText;
+            }
+            finally
+            {
+                acceptNextAlert = true;
+            }
         }
     }
 }

@@ -76,6 +76,6 @@ namespace webAddressbookTests
             }
         }
 
-
+        public object Contact { get; internal set; }
     }
 }

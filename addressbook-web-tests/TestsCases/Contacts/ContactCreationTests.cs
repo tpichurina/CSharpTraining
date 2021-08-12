@@ -14,6 +14,7 @@ namespace webAddressbookTests
             contact.Nickname = "test";
 
             app.Contacts.Create(contact);
+            app.Navigator.ReturnToHomePage();
         }
     }
 }

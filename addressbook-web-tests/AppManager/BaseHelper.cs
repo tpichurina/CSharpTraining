@@ -16,6 +16,5 @@ namespace webAddressbookTests
         {
             this.driver = driver;
         }
-
     }
 }
