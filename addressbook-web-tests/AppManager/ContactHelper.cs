@@ -73,6 +73,7 @@ namespace webAddressbookTests
             return this;
         }
 
+
         public ContactHelper SelectContact(int index)
         {
             driver.FindElements(By.Name("selected[]"))[index].Click();
