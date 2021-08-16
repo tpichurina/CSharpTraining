@@ -8,12 +8,12 @@ namespace webAddressbookTests
         [Test]
         public void ContactModificationTest()
         {
-            ContactData newData = new ContactData("w", "q");
+            ContactData newData = new ContactData("qq", "q");
             newData.Title = "1";
             newData.Company = "2";
             newData.Nickname = "3";
 
-            app.Contacts.Modify(newData);
+            app.Contacts.Modify(1, newData);
             app.Navigator.ReturnToHomePage();
         }
     }

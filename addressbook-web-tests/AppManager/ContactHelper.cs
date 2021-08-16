@@ -42,8 +42,9 @@ namespace webAddressbookTests
             return this;
         }
 
-        public ContactHelper Modify(ContactData newData)
+        public ContactHelper Modify(int v, ContactData newData)
         {
+            SelectContact(v);
             InitContactModification();
             FillContactForm(newData);
             SubmitContactModification();
