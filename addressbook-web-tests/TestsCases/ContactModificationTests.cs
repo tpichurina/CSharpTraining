@@ -13,7 +13,7 @@ namespace webAddressbookTests
             newData.Company = "2";
             newData.Nickname = "3";
 
-            app.Contacts.Modify(1, newData);
+            app.Contacts.Modify(newData);
             app.Navigator.ReturnToHomePage();
         }
     }
