@@ -27,23 +27,20 @@ namespace webAddressbookTests
 
         public ContactHelper FillContactForm(ContactData contact)
         {
-            driver.FindElement(By.Name("firstname")).Click();
-            driver.FindElement(By.Name("firstname")).Clear();
-            driver.FindElement(By.Name("firstname")).SendKeys(contact.Firstname);
-            driver.FindElement(By.Name("lastname")).Click();
-            driver.FindElement(By.Name("lastname")).Clear();
-            driver.FindElement(By.Name("lastname")).SendKeys(contact.Lastname);
-            driver.FindElement(By.Name("nickname")).Clear();
-            driver.FindElement(By.Name("nickname")).SendKeys(contact.Nickname);
-            driver.FindElement(By.Name("title")).Clear();
-            driver.FindElement(By.Name("title")).SendKeys(contact.Title);
-            driver.FindElement(By.Name("company")).Clear();
-            driver.FindElement(By.Name("company")).SendKeys(contact.Company);
+            Type(By.Name("firstname"), contact.Firstname);
+            Type(By.Name("lastname"), contact.Lastname);
+            Type(By.Name("nickname"), contact.Nickname);
+            Type(By.Name("title"), contact.Title);
+            Type(By.Name("company"), contact.Company);
             return this;
         }
 
         public ContactHelper Modify(ContactData newData)
         {
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                Create(newData);
+            }
             InitContactModification();
             FillContactForm(newData);
             SubmitContactModification();
@@ -76,11 +73,16 @@ namespace webAddressbookTests
 
         public ContactHelper SelectContact(int index)
         {
-            driver.FindElements(By.Name("selected[]"))[index].Click();
+            driver.FindElements(By.Name("selected[]"))[index - 1].Click();
             return this;
         }
         public ContactHelper RemoveContact(int v, bool acceptNextAlert)
         {
+            if (!IsElementPresent(By.Name("selected[]")))
+            {
+                var newData = new ContactData("ww", "tt");
+                Create(newData);
+            }
             SelectContact(v);
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
