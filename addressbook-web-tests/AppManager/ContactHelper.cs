@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace webAddressbookTests
@@ -25,10 +26,25 @@ namespace webAddressbookTests
             return this;
         }
 
+        public List<ContactData> GetContactList()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            ICollection<IWebElement> elements = driver.FindElements(By.Name("entry"));
+            foreach (IWebElement element in elements)
+            {
+                var firstName = element.FindElement(By.CssSelector("td:nth-child(2)")).Text;
+                var lastName = element.FindElement(By.CssSelector("td:nth-child(3)")).Text;
+
+                contacts.Add(new ContactData(firstName, lastName));
+
+            }
+            return contacts;
+        }
+
         public ContactHelper FillContactForm(ContactData contact)
         {
-            Type(By.Name("firstname"), contact.Firstname);
-            Type(By.Name("lastname"), contact.Lastname);
+            Type(By.Name("firstname"), contact.FirstName);
+            Type(By.Name("lastname"), contact.LastName);
             Type(By.Name("nickname"), contact.Nickname);
             Type(By.Name("title"), contact.Title);
             Type(By.Name("company"), contact.Company);
@@ -70,10 +86,9 @@ namespace webAddressbookTests
             return this;
         }
 
-
         public ContactHelper SelectContact(int index)
         {
-            driver.FindElements(By.Name("selected[]"))[index - 1].Click();
+            driver.FindElements(By.Name("selected[]"))[index].Click();
             return this;
         }
         public ContactHelper RemoveContact(int v, bool acceptNextAlert)

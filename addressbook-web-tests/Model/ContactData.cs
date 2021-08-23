@@ -1,41 +1,64 @@
-﻿namespace webAddressbookTests
+﻿using System;
+
+
+namespace webAddressbookTests
 {
-    public class ContactData
+
+    public class ContactData : IEquatable<ContactData>
     {
-        private string firstname;
-        private string lastname;
+        private string firstName;
+        private string lastName;
         private string nickname = "";
         private string title = "";
         private string company = "";
 
-        public ContactData(string firstname, string lastname)
+        public ContactData(string firstName, string lastName)
         {
 
-            this.firstname = firstname;
-            this.lastname = lastname;
+            this.firstName = firstName;
+            this.lastName = lastName;
         }
-        public string Firstname
+
+        public bool Equals(ContactData other)
+        {
+            if (Object.ReferenceEquals(other, null))
+            {
+                return false;
+            }
+            if (Object.ReferenceEquals(this, other))
+            {
+                return true;
+            }
+            return FirstName == other.FirstName && LastName == other.LastName;
+        }
+
+        public int GetHashCode()
+        {
+            return FirstName.GetHashCode();
+        }
+
+        public string FirstName
 
         {
             get
             {
-                return firstname;
+                return firstName;
             }
             set
             {
-                firstname = value;
+                firstName = value;
             }
         }
-        public string Lastname
+        public string LastName
 
         {
             get
             {
-                return lastname;
+                return lastName;
             }
             set
             {
-                lastname = value;
+                lastName = value;
             }
         }
         public string Nickname
