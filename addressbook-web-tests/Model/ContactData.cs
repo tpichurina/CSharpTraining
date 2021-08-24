@@ -4,19 +4,13 @@
 namespace webAddressbookTests
 {
 
-    public class ContactData : IEquatable<ContactData>
+    public class ContactData : IEquatable<ContactData>, IComparable<ContactData>
     {
-        private string firstName;
-        private string lastName;
-        private string nickname = "";
-        private string title = "";
-        private string company = "";
-
         public ContactData(string firstName, string lastName)
         {
 
-            this.firstName = firstName;
-            this.lastName = lastName;
+            FirstName = firstName;
+            LastName = lastName;
         }
 
         public bool Equals(ContactData other)
@@ -31,71 +25,35 @@ namespace webAddressbookTests
             }
             return FirstName == other.FirstName && LastName == other.LastName;
         }
-
-        public int GetHashCode()
+        public override int GetHashCode()
         {
             return FirstName.GetHashCode();
         }
 
-        public string FirstName
-
+        public override string ToString()
         {
-            get
-            {
-                return firstName;
-            }
-            set
-            {
-                firstName = value;
-            }
+            return String.Format("firstName={0}, lastName={1}", this.FirstName, this.LastName);
         }
-        public string LastName
 
+        public int CompareTo(ContactData other)
         {
-            get
+            if (object.ReferenceEquals(other, null))
             {
-                return lastName;
+                return 1;
             }
-            set
-            {
-                lastName = value;
-            }
+            return FirstName.CompareTo(other.FirstName);
         }
-        public string Nickname
 
-        {
-            get
-            {
-                return nickname;
-            }
-            set
-            {
-                nickname = value;
-            }
-        }
-        public string Title
+        public string FirstName { get; set; }
 
-        {
-            get
-            {
-                return title;
-            }
-            set
-            {
-                title = value;
-            }
-        }
-        public string Company
+        public string LastName { get; set; }
 
-        {
-            get
-            {
-                return company;
-            }
-            set
-            {
-                company = value;
-            }
-        }
+        public string Nickname { get; set; }
+
+        public string Title { get; set; }
+
+        public string Company { get; set; }
+
+        public string Id { get; set; }
     }
 }
