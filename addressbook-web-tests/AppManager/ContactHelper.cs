@@ -60,10 +60,6 @@ namespace webAddressbookTests
 
         public ContactHelper Modify(ContactData newData)
         {
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                Create(newData);
-            }
             InitContactModification();
             FillContactForm(newData);
             SubmitContactModification();
@@ -102,11 +98,6 @@ namespace webAddressbookTests
         }
         public ContactHelper RemoveContact(int v, bool acceptNextAlert)
         {
-            if (!IsElementPresent(By.Name("selected[]")))
-            {
-                var newData = new ContactData("ww", "tt");
-                Create(newData);
-            }
             SelectContact(v);
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));

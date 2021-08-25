@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System.Collections.Generic;
-
 
 namespace webAddressbookTests
 {
@@ -14,10 +14,13 @@ namespace webAddressbookTests
             newData.Header = null;
             newData.Footer = null;
 
+            if (!app.Groups.IsElementPresent(By.Name("selected[]")))
+            {
+                app.Groups.Create(newData);
+            }
+            app.Groups.Modify(0, newData);
             List<GroupData> oldGroups = app.Groups.GetGroupList();
             GroupData oldData = oldGroups[0];
-
-            app.Groups.Modify(0, newData);
 
             List<GroupData> newGroups = app.Groups.GetGroupList();
             oldGroups[0].Name = newData.Name;

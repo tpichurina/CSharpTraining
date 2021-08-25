@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System.Collections.Generic;
 
 namespace webAddressbookTests
@@ -9,6 +10,12 @@ namespace webAddressbookTests
         [Test]
         public void GroupRemovalTest()
         {
+            if (!app.Groups.IsElementPresent(By.Name("selected[]")))
+            {
+                var newData = new GroupData("ww");
+                app.Groups.Create(newData);
+            }
+
             List<GroupData> oldGroups = app.Groups.GetGroupList();
 
             app.Groups.Remove(0);

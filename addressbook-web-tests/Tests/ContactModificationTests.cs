@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System.Collections.Generic;
-
 
 namespace webAddressbookTests
 {
@@ -14,6 +14,11 @@ namespace webAddressbookTests
             newData.Title = null;
             newData.Company = null;
             newData.Nickname = null;
+
+            if (!app.Contacts.IsElementPresent(By.Name("selected[]")))
+            {
+                app.Contacts.Create(newData);
+            }
 
             List<ContactData> oldContacts = app.Contacts.GetContactList();
             ContactData oldData = oldContacts[0];
