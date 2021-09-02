@@ -20,18 +20,18 @@ namespace webAddressbookTests
         }
 
 
-        [Test]
-        public void LoginWithInvalidCredantials()
-        {
-            // prepare
-            app.Auth.Logout();
+        //[Test]
+        //public void LoginWithInvalidCredantials()
+        //{
+        //    // prepare
+        //    app.Auth.Logout();
 
-            // action
-            AccountData account = new AccountData("admin", "111111");
-            app.Auth.Login(account);
+        //    // action
+        //    AccountData account = new AccountData("admin", "111111");
+        //    app.Auth.Login(account);
 
-            // verification
-            Assert.IsFalse(app.Auth.IsLoggedIn(account));
-        }
+        //    // verification
+        //    Assert.IsFalse(app.Auth.IsLoggedIn(account));
+        //}
     }
 }
