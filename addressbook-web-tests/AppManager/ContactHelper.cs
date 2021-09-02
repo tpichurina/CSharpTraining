@@ -34,6 +34,22 @@ namespace webAddressbookTests
             };
         }
 
+        public string GetContactInformationFromDetails(int index)
+        {
+            manager.Navigator.OpenHomePage();
+            OpenDetailsPage(0);
+
+            var text = driver.FindElement(By.Id("content")).Text;
+            return text;
+        }
+
+        public void OpenDetailsPage(int index)
+        {
+            driver.FindElements(By.Name("entry"))[index]
+            .FindElements(By.TagName("td"))[6]
+            .FindElement(By.TagName("a")).Click();
+        }
+
         public ContactData GetContactInformationFromEditForm(int index)
         {
             manager.Navigator.OpenHomePage();
@@ -173,6 +189,14 @@ namespace webAddressbookTests
             }
         }
 
+        public string CleanUpAllContactData(string text)
+        {
+            if (text == null || text == "")
+            {
+                return "";
+            }
+            return Regex.Replace(text, "[ -()MHW:\\r\\n]", "");
+        }
         public int GetNumberOfSearchResults()
         {
             manager.Navigator.OpenHomePage();
@@ -180,5 +204,6 @@ namespace webAddressbookTests
             Match m = new Regex(@"\d+").Match(text);
             return int.Parse(m.Value);
         }
+
     }
 }

@@ -8,6 +8,7 @@ namespace webAddressbookTests
     {
         private string allPhones;
         private object allEmails;
+        private string allContactData;
 
         public ContactData(string firstName, string lastName)
         {
@@ -112,6 +113,25 @@ namespace webAddressbookTests
             set
             {
                 allPhones = value;
+            }
+        }
+
+        public string AllContactData
+        {
+            get
+            {
+                if (allContactData != null)
+                {
+                    return allContactData;
+                }
+                else
+                {
+                    return (FirstName + LastName + Address + AllPhones + AllEmails).Trim();
+                }
+            }
+            set
+            {
+                allContactData = value;
             }
         }
 
