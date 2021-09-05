@@ -39,8 +39,7 @@ namespace webAddressbookTests
             manager.Navigator.OpenHomePage();
             OpenDetailsPage(0);
 
-            var text = driver.FindElement(By.Id("content")).Text;
-            return text;
+            return driver.FindElement(By.Id("content")).Text;
         }
 
         public void OpenDetailsPage(int index)
@@ -189,14 +188,6 @@ namespace webAddressbookTests
             }
         }
 
-        public string CleanUpAllContactData(string text)
-        {
-            if (text == null || text == "")
-            {
-                return "";
-            }
-            return Regex.Replace(text, "[ -()MHW:\\r\\n]", "");
-        }
         public int GetNumberOfSearchResults()
         {
             manager.Navigator.OpenHomePage();

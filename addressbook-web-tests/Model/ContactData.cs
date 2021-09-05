@@ -8,11 +8,9 @@ namespace webAddressbookTests
     {
         private string allPhones;
         private object allEmails;
-        private string allContactData;
 
         public ContactData(string firstName, string lastName)
         {
-
             FirstName = firstName;
             LastName = lastName;
         }
@@ -120,18 +118,22 @@ namespace webAddressbookTests
         {
             get
             {
-                if (allContactData != null)
-                {
-                    return allContactData;
-                }
-                else
-                {
-                    return (FirstName + LastName + Address + AllPhones + AllEmails).Trim();
-                }
-            }
-            set
-            {
-                allContactData = value;
+                string address = String.IsNullOrEmpty(Address) ? "" : "\r\n" + Address;
+                string hPhone = String.IsNullOrEmpty(HomePhone) ? "" : "\r\nH: " + HomePhone;
+                string mPhone = String.IsNullOrEmpty(MobilePhone) ? "" : "\r\nM: " + MobilePhone;
+                string wPhone = String.IsNullOrEmpty(WorkPhone) ? "" : "\r\nW: " + WorkPhone;
+                string email = String.IsNullOrEmpty(Email) ? "" : "\r\n" + Email;
+                string email2 = String.IsNullOrEmpty(Email2) ? "" : "\r\n" + Email2;
+                string email3 = String.IsNullOrEmpty(Email3) ? "" : "\r\n" + Email3;
+
+                string phoneBlock = !String.IsNullOrEmpty(wPhone) || !String.IsNullOrEmpty(hPhone) ||
+                    !String.IsNullOrEmpty(mPhone) ? "\r\n" : "";
+
+                string emailBlock = !String.IsNullOrEmpty(email) || !String.IsNullOrEmpty(email2) ||
+                   !String.IsNullOrEmpty(email3) ? "\r\n" : "";
+
+                return $"{FirstName} {LastName}{address}{phoneBlock}{hPhone}{mPhone}" +
+                       $"{wPhone}{emailBlock}{email}{email2}{email3}";
             }
         }
 
@@ -141,7 +143,7 @@ namespace webAddressbookTests
             {
                 return "";
             }
-            return Regex.Replace(phone, "[ -()]", "") + "\r\n";
+            return Regex.Replace(phone, "[ ()-]", "") + "\r\n";
         }
     }
 }

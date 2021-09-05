@@ -20,8 +20,8 @@ namespace webAddressbookTests
         [Test]
         public void TestContactDetails()
         {
-            string fromDetails = app.Contacts.CleanUpAllContactData(app.Contacts.GetContactInformationFromDetails(0));
-            string fromForm = app.Contacts.CleanUpAllContactData(app.Contacts.GetContactInformationFromEditForm(0).AllContactData);
+            string fromDetails = app.Contacts.GetContactInformationFromDetails(0);
+            string fromForm = app.Contacts.GetContactInformationFromEditForm(0).AllContactData;
 
             Assert.AreEqual(fromForm, fromDetails);
         }
