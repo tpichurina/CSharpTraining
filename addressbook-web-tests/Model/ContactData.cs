@@ -8,7 +8,9 @@ namespace webAddressbookTests
     {
         private string allPhones;
         private object allEmails;
-
+        public ContactData()
+        {
+        }
         public ContactData(string firstName, string lastName)
         {
             FirstName = firstName;

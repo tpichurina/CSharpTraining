@@ -1,5 +1,9 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json;
+using NUnit.Framework;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
+
 
 namespace webAddressbookTests
 {
@@ -20,7 +24,40 @@ namespace webAddressbookTests
             }
             return contacts;
         }
-        [Test, TestCaseSource("RandomContactDataProvider")]
+
+        public static IEnumerable<ContactData> ContactDataFromCsvFile()
+        {
+            List<ContactData> contacts = new List<ContactData>();
+            string path = TestContext.CurrentContext.TestDirectory;
+            string[] lines = File.ReadAllLines(path + "\\contacts.csv");
+            foreach (string l in lines)
+            {
+                string[] parts = l.Split(',');
+                contacts.Add(new ContactData(parts[0], parts[1])
+                {
+                    Title = parts[2],
+                    Company = parts[3],
+                    Nickname = parts[4]
+
+                });
+            }
+            return contacts;
+        }
+        public static IEnumerable<ContactData> ContactDataFromXmlFile()
+        {
+            string path = TestContext.CurrentContext.TestDirectory;
+            return (List<ContactData>)
+                new XmlSerializer(typeof(List<ContactData>))
+                   .Deserialize(new StreamReader(path + "\\contacts.xml"));
+        }
+        public static IEnumerable<ContactData> ContactDataFromJsonFile()
+        {
+            string path = TestContext.CurrentContext.TestDirectory;
+            return JsonConvert.DeserializeObject<List<ContactData>>(
+                File.ReadAllText(path + "\\contacts.json"));
+        }
+
+        [Test, TestCaseSource("ContactDataFromXmlFile")]
         public void ContactCreationTest(ContactData contact)
         {
             List<ContactData> oldContacts = app.Contacts.GetContactList();
