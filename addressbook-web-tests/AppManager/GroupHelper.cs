@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 
 namespace webAddressbookTests
@@ -56,6 +57,26 @@ namespace webAddressbookTests
             ReturnToGroups();
             return this;
         }
+        public GroupHelper Modify(GroupData newData)
+        {
+            manager.Navigator.GoToGroupPage();
+            SelectGroup(newData.Id);
+            InitGroupModification();
+            FillGroupForm(newData);
+            SubmitGroupModification();
+            ReturnToGroups();
+            return this;
+        }
+
+        public GroupHelper Remove(GroupData group)
+        {
+            manager.Navigator.GoToGroupPage();
+
+            SelectGroup(group.Id);
+            RemoveGroup();
+            ReturnToGroups();
+            return this;
+        }
 
         public GroupHelper Remove(int v)
         {
@@ -108,6 +129,11 @@ namespace webAddressbookTests
         public GroupHelper SelectGroup(int index)
         {
             driver.FindElement(By.XPath("//div[@id='content']/form/span [" + (index + 1) + "] /input")).Click();
+            return this;
+        }
+        public GroupHelper SelectGroup(string id)
+        {
+            driver.FindElement(By.CssSelector("[value='" + id + "']")).Click();
             return this;
         }
 

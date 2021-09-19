@@ -5,12 +5,12 @@ using System.Collections.Generic;
 namespace webAddressbookTests
 {
     [TestFixture]
-    public class GroupModificationTests : AuthTestBase
+    public class GroupModificationTests : GroupTestbase
     {
         [Test]
         public void GroupModificationTest()
         {
-            GroupData newData = new GroupData("changedgroup");
+            GroupData newData = new GroupData("testname");
             newData.Header = null;
             newData.Footer = null;
 
@@ -18,23 +18,17 @@ namespace webAddressbookTests
             {
                 app.Groups.Create(newData);
             }
-            app.Groups.Modify(0, newData);
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
-            GroupData oldData = oldGroups[0];
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
-            oldGroups[0].Name = newData.Name;
-            oldGroups.Sort();
-            newGroups.Sort();
+            List<GroupData> oldGroups = GroupData.GetAll();
+            GroupData toModifi = oldGroups[0];
+
+            toModifi.Name = newData.Name;
+
+            app.Groups.Modify(toModifi);
+
+            List<GroupData> newGroups = GroupData.GetAll();
+
             Assert.AreEqual(oldGroups, newGroups);
-
-            foreach (GroupData group in newGroups)
-            {
-                if (group.Id == oldData.Id)
-                {
-                    Assert.AreEqual(newData.Name, group.Name);
-                }
-            }
         }
     }
 }

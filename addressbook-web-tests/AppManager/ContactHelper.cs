@@ -49,10 +49,35 @@ namespace webAddressbookTests
             .FindElement(By.TagName("a")).Click();
         }
 
+        public ContactData GetContactInformationFromEditForm(ContactData newData)
+        {
+            manager.Navigator.OpenHomePage();
+            InitContactModification(newData.Id);
+            string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
+            string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
+            string address = driver.FindElement(By.Name("address")).GetAttribute("value");
+            string homePhome = driver.FindElement(By.Name("home")).GetAttribute("value");
+            string mobilePhome = driver.FindElement(By.Name("mobile")).GetAttribute("value");
+            string workPhome = driver.FindElement(By.Name("work")).GetAttribute("value");
+            string email = driver.FindElement(By.Name("email")).GetAttribute("value");
+            string email2 = driver.FindElement(By.Name("email2")).GetAttribute("value");
+            string email3 = driver.FindElement(By.Name("email3")).GetAttribute("value");
+
+            return new ContactData(firstName, lastName)
+            {
+                Address = address,
+                HomePhone = homePhome,
+                MobilePhone = mobilePhome,
+                WorkPhone = workPhome,
+                Email = email,
+                Email2 = email2,
+                Email3 = email3
+            };
+        }
         public ContactData GetContactInformationFromEditForm(int index)
         {
             manager.Navigator.OpenHomePage();
-            InitContactModification(0);
+            InitContactModification(index);
             string firstName = driver.FindElement(By.Name("firstname")).GetAttribute("value");
             string lastName = driver.FindElement(By.Name("lastname")).GetAttribute("value");
             string address = driver.FindElement(By.Name("address")).GetAttribute("value");
@@ -121,7 +146,7 @@ namespace webAddressbookTests
 
         public ContactHelper Modify(ContactData newData)
         {
-            InitContactModification(0);
+            InitContactModification(newData.Id);
             FillContactForm(newData);
             SubmitContactModification();
             return this;
@@ -146,9 +171,14 @@ namespace webAddressbookTests
             return this;
         }
 
+        public ContactHelper InitContactModification(string id)
+        {
+            driver.FindElement(By.CssSelector("[href='edit.php?id=" + id + "']")).Click();
+            return this;
+        }
         public ContactHelper InitContactModification(int index)
         {
-            driver.FindElement(By.XPath("//img[@alt='Edit']")).Click();
+            driver.FindElements(By.Name("selected[]"))[index].Click();
             return this;
         }
 
@@ -157,9 +187,24 @@ namespace webAddressbookTests
             driver.FindElements(By.Name("selected[]"))[index - 1].Click();
             return this;
         }
+        public ContactHelper SelectContact(string id)
+        {
+            driver.FindElement(By.CssSelector("[id='" + id + "']")).Click();
+            return this;
+        }
+
         public ContactHelper RemoveContact(int v, bool acceptNextAlert)
         {
             SelectContact(v);
+            driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
+            Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
+            contactCashe = null;
+            return this;
+        }
+
+        public ContactHelper RemoveContact(ContactData contact, bool acceptNextAlert)
+        {
+            SelectContact(contact.Id);
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
             contactCashe = null;

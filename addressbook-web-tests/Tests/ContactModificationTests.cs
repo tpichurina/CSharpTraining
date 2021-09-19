@@ -5,42 +5,33 @@ using System.Collections.Generic;
 namespace webAddressbookTests
 {
     [TestFixture]
-    public class ContactModificationTests : AuthTestBase
+    public class ContactModificationTests : ContactTestbase
     {
         [Test]
         public void ContactModificationTest()
         {
-            ContactData newData = new ContactData("changed", "contact");
-            newData.Title = null;
-            newData.Company = null;
-            newData.Nickname = null;
+            ContactData newData = new ContactData("changed", "contact")
+            {
+                Title = null,
+                Company = null,
+                Nickname = null
+            };
 
             if (!app.Contacts.IsElementPresent(By.Name("selected[]")))
             {
                 app.Contacts.Create(newData);
             }
 
-            List<ContactData> oldContacts = app.Contacts.GetContactList();
-            ContactData oldData = oldContacts[0];
+            List<ContactData> oldContacts = ContactData.GetAll();
+            ContactData toModifi = oldContacts[0];
 
-            app.Contacts.Modify(newData);
-            app.Navigator.ReturnToHomePage();
+            toModifi.FirstName = newData.FirstName;
+            toModifi.LastName = newData.LastName;
 
-            List<ContactData> newContacts = app.Contacts.GetContactList();
-            oldContacts[0].FirstName = newData.FirstName;
-            oldContacts[0].LastName = newData.LastName;
-            oldContacts.Sort();
-            newContacts.Sort();
+            app.Contacts.Modify(toModifi);
+
+            List<ContactData> newContacts = ContactData.GetAll();
             Assert.AreEqual(oldContacts, newContacts);
-
-            foreach (ContactData contact in newContacts)
-            {
-                if (contact.Id == oldData.Id)
-                {
-                    Assert.AreEqual(newData.FirstName, contact.FirstName);
-                    Assert.AreEqual(newData.LastName, contact.LastName);
-                }
-            }
         }
     }
 }

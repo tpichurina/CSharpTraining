@@ -3,13 +3,12 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using System.Linq;
 using System;
 
 namespace webAddressbookTests
 {
     [TestFixture]
-    public class GroupCreationTests : AuthTestBase
+    public class GroupCreationTests : GroupTestbase
     {
         public static IEnumerable<GroupData> RandomGroupDataProvider()
         {
@@ -42,6 +41,7 @@ namespace webAddressbookTests
             }
             return groups;
         }
+
         public static IEnumerable<GroupData> GroupDataFromXmlFile()
         {
             string path = TestContext.CurrentContext.TestDirectory;
@@ -49,6 +49,7 @@ namespace webAddressbookTests
                 new XmlSerializer(typeof(List<GroupData>))
                    .Deserialize(new StreamReader(path + "\\groups.xml"));
         }
+
         public static IEnumerable<GroupData> GroupDataFromJsonFile()
         {
             string path = TestContext.CurrentContext.TestDirectory;
@@ -56,18 +57,15 @@ namespace webAddressbookTests
                 File.ReadAllText(path + "\\groups.json"));
         }
 
-
-        [Test, TestCaseSource("GroupDataFromJsonFile")]
+        [Test, TestCaseSource("GroupDataFromXmlFile")]
         public void GroupCreationTest(GroupData group)
         {
-            List<GroupData> oldGroups = app.Groups.GetGroupList();
+            List<GroupData> oldGroups = GroupData.GetAll();
 
             app.Groups.Create(group);
 
-            List<GroupData> newGroups = app.Groups.GetGroupList();
+            List<GroupData> newGroups = GroupData.GetAll();
             oldGroups.Add(group);
-            oldGroups.Sort();
-            newGroups.Sort();
             Assert.AreEqual(oldGroups, newGroups);
         }
 
@@ -80,9 +78,7 @@ namespace webAddressbookTests
             System.Console.Out.WriteLine(end.Subtract(start));
 
             start = DateTime.Now;
-            AddressBookDB db = new AddressBookDB();
-            List<GroupData> fromDb = (from g in db.Groups select g).ToList();
-            db.Close();
+            List<GroupData> fromDb = GroupData.GetAll();
             end = DateTime.Now;
             System.Console.Out.WriteLine(end.Subtract(start));
         }
