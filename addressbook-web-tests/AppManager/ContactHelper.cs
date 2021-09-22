@@ -1,5 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -32,6 +34,52 @@ namespace webAddressbookTests
                 AllEmails = allEmails,
                 AllPhones = allPhones
             };
+        }
+
+        internal void RemoveContactFromGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.OpenHomePage();
+            ApplyGroupFilter(group.Id);
+            SelectContact(contact.Id);
+            ComitRemovingContactfFromGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        public void ComitRemovingContactfFromGroup()
+        {
+            driver.FindElement(By.Name("remove")).Click();
+        }
+
+        public void ApplyGroupFilter(string groupId)
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByValue(groupId);
+        }
+
+        internal void AddContactToGroup(ContactData contact, GroupData group)
+        {
+            manager.Navigator.OpenHomePage();
+            ClearGroupFilter();
+            SelectContact(contact.Id);
+            SelectGroupToAdd(group.Name);
+            ComitAddingContactToGroup();
+            new WebDriverWait(driver, TimeSpan.FromSeconds(10))
+                .Until(d => d.FindElements(By.CssSelector("div.msgbox")).Count > 0);
+        }
+
+        public void ComitAddingContactToGroup()
+        {
+            driver.FindElement(By.Name("add")).Click();
+        }
+
+        public void SelectGroupToAdd(string name)
+        {
+            new SelectElement(driver.FindElement(By.Name("to_group"))).SelectByText(name);
+        }
+
+        public void ClearGroupFilter()
+        {
+            new SelectElement(driver.FindElement(By.Name("group"))).SelectByText("[none]");
         }
 
         public string GetContactInformationFromDetails(int index)
