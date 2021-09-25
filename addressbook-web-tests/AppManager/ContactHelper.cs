@@ -154,6 +154,7 @@ namespace webAddressbookTests
 
         public ContactHelper Create(ContactData contact)
         {
+            manager.Navigator.OpenHomePage();
             InitContactCreation();
             FillContactForm(contact);
             SubmitAccountCreation();
@@ -194,6 +195,7 @@ namespace webAddressbookTests
 
         public ContactHelper Modify(ContactData newData)
         {
+            manager.Navigator.OpenHomePage();
             InitContactModification(newData.Id);
             FillContactForm(newData);
             SubmitContactModification();
@@ -243,6 +245,7 @@ namespace webAddressbookTests
 
         public ContactHelper RemoveContact(int v, bool acceptNextAlert)
         {
+            manager.Navigator.OpenHomePage();
             SelectContact(v);
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));
@@ -252,6 +255,7 @@ namespace webAddressbookTests
 
         public ContactHelper RemoveContact(ContactData contact, bool acceptNextAlert)
         {
+            manager.Navigator.OpenHomePage();
             SelectContact(contact.Id);
             driver.FindElement(By.XPath("//input[@value='Delete']")).Click();
             Assert.IsTrue(Regex.IsMatch(CloseAlertAndGetItsText(acceptNextAlert), "^Delete 1 addresses[\\s\\S]$"));

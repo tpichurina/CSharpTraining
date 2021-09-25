@@ -10,9 +10,11 @@ namespace webAddressbookTests
         [Test]
         public void GroupModificationTest()
         {
-            GroupData newData = new GroupData("testname");
-            newData.Header = null;
-            newData.Footer = null;
+            GroupData newData = new GroupData("testname")
+            {
+                Header = null,
+                Footer = null
+            };
 
             if (!app.Groups.IsElementPresent(By.Name("selected[]")))
             {
