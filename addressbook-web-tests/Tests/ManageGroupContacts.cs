@@ -11,18 +11,23 @@ namespace webAddressbookTests
         public void TestAddingContactToGroup()
         {
 
-            GroupData newData = new GroupData("testname")
+            List<GroupData> AtLeastOneGroupExist = GroupData.GetAll();
+            if (AtLeastOneGroupExist.Count == 0)
             {
-                Header = null,
-                Footer = null
-            };
-
-            if (!app.Groups.IsElementPresent(By.Name("selected[]")))
-            {
-                app.Groups.Create(newData);
+                GroupData newGroup = new GroupData("qq");
+                app.Groups.Create(newGroup);
             }
 
             GroupData group = GroupData.GetAll()[0];
+
+            List<ContactData> AtLeastOneContactExist = ContactData.GetAll();
+            if (AtLeastOneContactExist.Count == 0)
+            {
+                ContactData newContact = new ContactData("qq", "ll");
+                app.Contacts.Create(newContact);
+            }
+
+
             List<ContactData> oldList = group.GetContacts();
             ContactData contact = ContactData.GetAll().Except(group.GetContacts()).First();
 
@@ -39,15 +44,29 @@ namespace webAddressbookTests
         [Test]
         public void TestDeletingContactFromGroup()
         {
-            GroupData newData = new GroupData("testname");
-            newData.Header = null;
-            newData.Footer = null;
-
-            if (!app.Groups.IsElementPresent(By.Name("selected[]")))
+            if (GroupData.GetAll().Count == 0)
             {
-                app.Groups.Create(newData);
+                GroupData newGroup = new GroupData("qq");
+                app.Groups.Create(newGroup);
             }
+
             GroupData group = GroupData.GetAll()[0];
+
+            List<ContactData> contactInGroup = group.GetContacts();
+            if (contactInGroup.Count == 0)
+            {
+                ContactData contactWithoutGroup = ContactData.GetContactWithoutGroup();
+
+                if (contactWithoutGroup == null)
+                {
+                    ContactData newContact = new ContactData("qq", "ll");
+                    app.Contacts.Create(newContact);
+                    contactWithoutGroup = ContactData.GetAll().Except(group.GetContacts()).First();
+                }
+
+                app.Contacts.AddContactToGroup(contactWithoutGroup, group);
+            }
+
             List<ContactData> oldList = group.GetContacts();
             ContactData contact = oldList[0];
 
@@ -57,7 +76,6 @@ namespace webAddressbookTests
             oldList.RemoveAt(0);
 
             Assert.AreEqual(oldList, newList);
-
         }
     }
 }

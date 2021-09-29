@@ -47,6 +47,7 @@ namespace webAddressbookTests
             return new List<GroupData>(groupCashe);
         }
 
+
         public GroupHelper Modify(int v, GroupData newData)
         {
             manager.Navigator.GoToGroupPage();
