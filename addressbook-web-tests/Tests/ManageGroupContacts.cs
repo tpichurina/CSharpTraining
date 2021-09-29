@@ -10,9 +10,7 @@ namespace webAddressbookTests
         [Test]
         public void TestAddingContactToGroup()
         {
-
-            List<GroupData> AtLeastOneGroupExist = GroupData.GetAll();
-            if (AtLeastOneGroupExist.Count == 0)
+            if (GroupData.GetAll().Count == 0)
             {
                 GroupData newGroup = new GroupData("qq");
                 app.Groups.Create(newGroup);
@@ -20,8 +18,7 @@ namespace webAddressbookTests
 
             GroupData group = GroupData.GetAll()[0];
 
-            List<ContactData> AtLeastOneContactExist = ContactData.GetAll();
-            if (AtLeastOneContactExist.Count == 0)
+            if (GroupData.GetAll().Count == 0)
             {
                 ContactData newContact = new ContactData("qq", "ll");
                 app.Contacts.Create(newContact);
