@@ -17,10 +17,6 @@ namespace mantis_tests
 
         private static ThreadLocal<ApplicationManager> app = new ThreadLocal<ApplicationManager>();
 
-        public LoginHelper Login { get { return loginHelper; } set { loginHelper = value; } }
-        public ProjectHelper Project { get { return projectHelper; } set { projectHelper = value; } }
-        public NavigationHelper Navigate { get { return navigationHelper; } set { navigationHelper = value; } }
-
         private ApplicationManager()
         {
             new DriverManager().SetUpDriver(new FirefoxConfig());
@@ -30,6 +26,7 @@ namespace mantis_tests
             Login = new LoginHelper(this);
             Project = new ProjectHelper(this);
             Navigate = new NavigationHelper(this, baseURL);
+            API = new APIHelper(this);
         }
 
         ~ApplicationManager()
@@ -61,5 +58,9 @@ namespace mantis_tests
                 return driver;
             }
         }
+        public LoginHelper Login { get { return loginHelper; } set { loginHelper = value; } }
+        public ProjectHelper Project { get { return projectHelper; } set { projectHelper = value; } }
+        public NavigationHelper Navigate { get { return navigationHelper; } set { navigationHelper = value; } }
+        public APIHelper API { get; }
     }
 }

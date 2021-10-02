@@ -10,23 +10,14 @@ namespace mantis_tests
         [Test]
         public void ProjectCreatiomTest()
         {
-            List<ProjectData> oldList = app.Project.GetAllProjects();
+            ProjectData project = new ProjectData() { Name = "test" };
+            AccountData account = new AccountData("administrator", "root");
 
-            ProjectData project = new ProjectData()
-            {
-                Name = "test",
-            };
+            List<ProjectData> oldList = app.API.GetAllProjects(account);
 
-            ProjectData duplicateProjectName = oldList.Find(p => p.Name == project.Name);
-            if (duplicateProjectName != null)
-            {
-                app.Project.RemoveProject(duplicateProjectName);
-            }
+            app.API.CreateNewProject(account, project);
 
-            oldList = app.Project.GetAllProjects();
-            app.Project.Create(project);
-
-            List<ProjectData> newList = app.Project.GetAllProjects();
+            List<ProjectData> newList = app.API.GetAllProjects(account);
 
             oldList.Add(project);
 
