@@ -28,7 +28,7 @@ namespace mantis_tests
             List<ProjectData> projectList = new List<ProjectData>();
             projectArr = client.mc_projects_get_user_accessibleAsync(account.Username, account.Password);
 
-            foreach (ProjectData pr in projectList)
+            foreach (ProjectData pr in projectArr)
             {
                 ProjectData project = new ProjectData();
                 project.Name = pr.Name;
